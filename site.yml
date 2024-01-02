@@ -1,0 +1,5 @@
+---
+- name: Configure backup servers
+  hosts: backup
+  roles:
+    - pgdump

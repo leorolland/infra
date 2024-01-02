@@ -1,0 +1,43 @@
+---
+# This playbook will install psql 15, the backup script, and register the script to crontab
+
+- name: Install requirements
+  become: true
+  apt:
+    pkg:
+      - gnupg
+      - gnupg2
+      - gnupg1
+
+- name: Install postgresql-common to get last postgresql.org ppa
+  become: true
+  apt:
+    name: postgresql-common
+    state: latest
+
+- name: Install last postgresql.org ppa
+  become: true
+  shell: /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Install psql 15 tools
+  become: true
+  apt:
+    name: postgresql-client-15
+    state: present
+
+- name: Create backup script
+  template:
+    src: dump.sh.j2
+    dest: '{{ backup_dir }}/dump.sh'
+
+- name: Add hourly dump to crontab
+  cron:
+    name: "hourly dump of {{ pgdump.host }}/{{ pgdump.database }}"
+    hour: "0"
+    minute: "*"
+    job: '{{ backup_dir }}/dump.sh'

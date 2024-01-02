@@ -1,0 +1,6 @@
+backup:
+  hosts:
+    vm_hyp:
+      ansible_host: 192.168.1.3
+      ansible_user: black
+      backup_dir: /mnt/crucial_250_bd/Backups
