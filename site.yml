@@ -3,3 +3,17 @@
   hosts: backup
   roles:
     - pgdump
+
+- name: Configure web servers
+  hosts: static
+  become: true
+  roles:
+    - role: caddy-ansible
+      caddy_config: |
+        noxunote.fr {
+          encode zstd gzip
+          handle {
+            root * /home/caddy/noxunote.fr
+            file_server
+          }
+        }

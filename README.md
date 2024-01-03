@@ -13,6 +13,12 @@ My personal infrastructure is composed of:
 
 ## Configuration
 
+1. Install dependencies
+```sh
+ansible-galaxy collection install community.general
+ansible-galaxy install -r requirements.yml
+```
+
 1. Configure `inventory.yml` with backup and static servers
 
 1. Create `vars.yml`
