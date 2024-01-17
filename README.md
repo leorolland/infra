@@ -2,7 +2,7 @@
 
 My personal infrastructure is composed of:
 - 💾 **backup** server(s):
-  - creates and stores `postgresql` backups (hourly `pg_dump`)
+  - creates and stores `postgresql` backups (regular `pg_dump`)
   - (soon) syncs a remote server with rsync
 - 🌐 **static** server(s):
   - serves my web static content (with http3 and SSL enabled using [Caddy](https://github.com/caddyserver/caddy))

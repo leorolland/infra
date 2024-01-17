@@ -32,9 +32,9 @@
     dest: '{{ backup_dir }}/dump.sh'
     mode: '0644'
 
-- name: Add hourly dump to crontab
+- name: Add regular dump to crontab
   ansible.builtin.cron:
-    name: "hourly dump of {{ pgdump.host }}/{{ pgdump.database }}"
-    hour: "*"
+    name: "regular dump of {{ pgdump.host }}/{{ pgdump.database }}"
+    hour: "*/3"
     minute: "0"
     job: '{{ backup_dir }}/dump.sh'
