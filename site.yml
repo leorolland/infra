@@ -9,7 +9,13 @@
   become: true
   roles:
     - role: caddy-ansible
+      caddy_systemd_capabilities_enabled: true
       caddy_config: |
+        photo.noxunote.fr {
+          handle {
+            reverse_proxy :8000
+          }
+        }
         noxunote.fr {
           encode zstd gzip
           handle {
