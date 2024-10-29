@@ -23,3 +23,9 @@
             file_server
           }
         }
+        codebar.noxunote.fr {
+          encode zstd gzip
+          handle {
+            reverse_proxy :8080
+          }
+        }
