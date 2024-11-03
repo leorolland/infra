@@ -29,3 +29,6 @@
             reverse_proxy :8080
           }
         }
+        aronin.app {
+          redir https://dental-aronin.webflow.io/
+        }
