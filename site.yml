@@ -11,7 +11,7 @@
     - role: caddy-ansible
       caddy_systemd_capabilities_enabled: true
       caddy_config: |
-        photo.noxunote.fr, photo.rleo.ovh {
+        photo.rleo.ovh {
           handle {
             reverse_proxy :8000
           }
@@ -23,10 +23,9 @@
             file_server
           }
         }
-        codebar.noxunote.fr, codebar.rleo.ovh {
-          encode zstd gzip
+        sortir.in {
           handle {
-            reverse_proxy :8080
+            reverse_proxy :8090
           }
         }
         aronin.app {
