@@ -53,13 +53,13 @@
 - name: Reload systemd daemon
   become: true
   ansible.builtin.systemd:
-    daemon_reload: yes
+    daemon_reload: true
 
 - name: Enable and restart sortir service
   become: true
   ansible.builtin.systemd:
     name: sortir
-    enabled: yes
+    enabled: true
     state: restarted
 
 - name: Add populate to crontab
