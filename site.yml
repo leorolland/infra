@@ -8,6 +8,10 @@
   hosts: static
   become: true
   roles:
+    - role: sortir
+      sortir_populate_cron_hour: "*/12"
+      sortir_populate_cron_minute: "0"
+      sortir_populate_locations_quantity: "15"
     - role: caddy-ansible
       caddy_systemd_capabilities_enabled: true
       caddy_config: |

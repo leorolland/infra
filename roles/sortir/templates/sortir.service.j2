@@ -1,0 +1,14 @@
+[Unit]
+Description=Sortir.in API Service
+After=network.target
+
+[Service]
+Type=simple
+User={{ ansible_user }}
+WorkingDirectory=/home/{{ ansible_user }}/sortir.in
+ExecStart=/home/{{ ansible_user }}/sortir.in/sortir serve
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

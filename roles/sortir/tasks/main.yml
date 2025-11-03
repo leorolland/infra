@@ -1,0 +1,71 @@
+---
+# This playbook will install the sortir.in service on the remote server and populate the database daily (by default every 12 hours)
+
+- name: Set home directory fact
+  ansible.builtin.set_fact:
+    home_dir: "/home/{{ ansible_user }}"
+
+- name: Debug - Display home directory
+  ansible.builtin.debug:
+    msg: "Using home directory: {{ home_dir }}"
+
+- name: Create sortir.in directory
+  ansible.builtin.file:
+    path: "{{ home_dir }}/sortir.in"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: Remove existing binary (if any)
+  ansible.builtin.file:
+    path: "{{ home_dir }}/sortir.in/sortir"
+    state: absent
+
+- name: Download sortir.in binary
+  ansible.builtin.get_url:
+    url: https://github.com/leorolland/sortir.in/releases/download/latest/sortir.linux-arm64
+    dest: "{{ home_dir }}/sortir.in/sortir"
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: Remove existing populate binary (if any)
+  ansible.builtin.file:
+    path: "{{ home_dir }}/sortir.in/populate"
+    state: absent
+
+- name: Download populate binary
+  ansible.builtin.get_url:
+    url: https://github.com/leorolland/sortir.in/releases/download/latest/populate.linux-arm64
+    dest: "{{ home_dir }}/sortir.in/populate"
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: Create systemd service file
+  become: true
+  ansible.builtin.template:
+    src: sortir.service.j2
+    dest: /etc/systemd/system/sortir.service
+    mode: '0644'
+
+- name: Reload systemd daemon
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable and restart sortir service
+  become: true
+  ansible.builtin.systemd:
+    name: sortir
+    enabled: yes
+    state: restarted
+
+- name: Add populate to crontab
+  ansible.builtin.cron:
+    name: "Run sortir.in populate"
+    hour: "{{ sortir_populate_cron_hour | default('*/12') }}"
+    minute: "{{ sortir_populate_cron_minute | default('0') }}"
+    job: "cd {{ home_dir }}/sortir.in && ./populate {{ sortir_populate_locations_quantity | default('2') }}"
+    user: "{{ ansible_user }}"
