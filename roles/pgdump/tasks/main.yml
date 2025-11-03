@@ -20,16 +20,16 @@
   ansible.builtin.apt:
     update_cache: true
 
-- name: Install psql 15 tools
+- name: Install psql 16 tools
   become: true
   ansible.builtin.apt:
-    name: postgresql-client-15
+    name: postgresql-client-16
     state: present
 
 - name: Create backup script
   ansible.builtin.template:
     src: dump.sh.j2
-    dest: '{{ backup_dir }}/dump.sh'
+    dest: '{{ backup_dir }}/dump2.sh'
     mode: '0644'
 
 - name: Add regular dump to crontab
