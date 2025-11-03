@@ -4,9 +4,9 @@ static:
       ansible_host: 192.168.1.59
       ansible_user: freebox
 
-backup:
-  hosts:
-    vm_hyp:
-      ansible_host: 192.168.1.59
-      ansible_user: freebox
-      backup_dir: /mnt/crucial_250_bd/Backups
+# backup:
+#   hosts:
+#     vm_hyp:
+#       ansible_host: 192.168.1.59
+#       ansible_user: freebox
+#       backup_dir: /mnt/crucial_250_bd/Backups

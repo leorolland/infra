@@ -20,13 +20,6 @@
             reverse_proxy :8000
           }
         }
-        noxunote.fr {
-          encode zstd gzip
-          handle {
-            root * /home/caddy/noxunote.fr
-            file_server
-          }
-        }
         sortir.in {
           handle {
             reverse_proxy :8090
