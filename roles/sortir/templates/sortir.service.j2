@@ -5,8 +5,8 @@ After=network.target
 [Service]
 Type=simple
 User={{ ansible_user }}
-WorkingDirectory=/home/{{ ansible_user }}/sortir.in
-ExecStart=/home/{{ ansible_user }}/sortir.in/sortir serve
+WorkingDirectory={{ sortir_install_dir }}
+ExecStart={{ sortir_install_dir }}/sortir serve
 Restart=on-failure
 RestartSec=5
 
