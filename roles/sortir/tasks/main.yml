@@ -11,7 +11,7 @@
 
 - name: Download sortir.in binaries
   ansible.builtin.get_url:
-    url: "https://github.com/leorolland/sortir.in/releases/download/latest/{{ item }}.linux-{{ sortir_arch }}"
+    url: "https://github.com/leorolland/sortir.in/releases/download/{{ sortir_version }}/{{ item }}.linux-{{ sortir_arch }}"
     dest: "{{ sortir_install_dir }}/{{ item }}"
     mode: '0755'
     owner: "{{ ansible_user }}"
@@ -39,6 +39,12 @@
     name: sortir
     enabled: true
     state: restarted
+
+- name: Install cron
+  become: true
+  ansible.builtin.apt:
+    name: cron
+    state: present
 
 - name: Add populate to crontab
   ansible.builtin.cron:
