@@ -1,47 +1,25 @@
 ---
-# This playbook will install the sortir.in service on the remote server and populate the database daily (by default every 12 hours)
-
-- name: Set home directory fact
-  ansible.builtin.set_fact:
-    home_dir: "/home/{{ ansible_user }}"
-
-- name: Debug - Display home directory
-  ansible.builtin.debug:
-    msg: "Using home directory: {{ home_dir }}"
+# This playbook will install the sortir.in service on the remote server and populate the database regularly (by default every 12 hours)
 
 - name: Create sortir.in directory
   ansible.builtin.file:
-    path: "{{ home_dir }}/sortir.in"
+    path: "{{ sortir_install_dir }}"
     state: directory
     mode: '0755'
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
 
-- name: Remove existing binary (if any)
-  ansible.builtin.file:
-    path: "{{ home_dir }}/sortir.in/sortir"
-    state: absent
-
-- name: Download sortir.in binary
+- name: Download sortir.in binaries
   ansible.builtin.get_url:
-    url: https://github.com/leorolland/sortir.in/releases/download/latest/sortir.linux-arm64
-    dest: "{{ home_dir }}/sortir.in/sortir"
+    url: "https://github.com/leorolland/sortir.in/releases/download/{{ sortir_version }}/{{ item }}.linux-{{ sortir_arch }}"
+    dest: "{{ sortir_install_dir }}/{{ item }}"
     mode: '0755'
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
-
-- name: Remove existing populate binary (if any)
-  ansible.builtin.file:
-    path: "{{ home_dir }}/sortir.in/populate"
-    state: absent
-
-- name: Download populate binary
-  ansible.builtin.get_url:
-    url: https://github.com/leorolland/sortir.in/releases/download/latest/populate.linux-arm64
-    dest: "{{ home_dir }}/sortir.in/populate"
-    mode: '0755'
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    force: true
+  loop:
+    - sortir
+    - populate
 
 - name: Create systemd service file
   become: true
@@ -62,10 +40,16 @@
     enabled: true
     state: restarted
 
+- name: Install cron
+  become: true
+  ansible.builtin.apt:
+    name: cron
+    state: present
+
 - name: Add populate to crontab
   ansible.builtin.cron:
     name: "Run sortir.in populate"
-    hour: "{{ sortir_populate_cron_hour | default('*/12') }}"
-    minute: "{{ sortir_populate_cron_minute | default('0') }}"
-    job: "cd {{ home_dir }}/sortir.in && ./populate {{ sortir_populate_locations_quantity | default('2') }}"
+    hour: "{{ sortir_populate_cron_hour }}"
+    minute: "{{ sortir_populate_cron_minute }}"
+    job: "cd {{ sortir_install_dir }} && ./populate {{ sortir_populate_locations_quantity }}"
     user: "{{ ansible_user }}"

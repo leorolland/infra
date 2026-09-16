@@ -1,9 +1,6 @@
 # My infra (WIP)
 
 My personal infrastructure is composed of:
-- 💾 **backup** server(s):
-  - creates and stores `postgresql` backups (regular `pg_dump`)
-  - (soon) syncs a remote server with rsync
 - 🌐 **static** server(s):
   - serves my web static content (with http3 and SSL enabled using [Caddy](https://github.com/caddyserver/caddy))
   - runs the latest version of [sortir.in](https://github.com/leorolland/sortir.in) API service
@@ -11,7 +8,7 @@ My personal infrastructure is composed of:
 
 ## Pre-requirements
 - Linux servers with `python` and `apt`
-- your SSH public key in servers authorized keys (`./ssh/authorized-hosts`)
+- your SSH public key in the servers' authorized keys
 
 ## Configuration
 
@@ -21,29 +18,26 @@ ansible-galaxy collection install community.general
 ansible-galaxy install -r requirements.yml
 ```
 
-2. Configure `inventory.yml` with backup and static servers
+2. Configure `inventory.yml` with the static server(s)
 
-3. Create `vars.yml`
-
-```yml
-pgdump:
-  user: changeme
-  password: changeme
-  host: changeme
-  database: changeme
-```
-
-4. Configure sortir.in service parameters in `site.yml` (optional)
-
-The sortir.in service is configured with the following default parameters:
+3. (Optional) Override the sortir.in service defaults from `roles/sortir/defaults/main.yml` in `site.yml`:
 ```yml
 - role: sortir
-  sortir_populate_cron_hour: "*/12"     # Run populate job every 12 hours
-  sortir_populate_cron_minute: "0"      # At minute 0
-  sortir_populate_locations_quantity: "15"  # Get and populate DB with events of top 15 France locations
+  sortir_populate_cron_hour: "*/12"          # Run populate job every 12 hours
+  sortir_populate_cron_minute: "0"           # At minute 0
+  sortir_populate_locations_quantity: "15"   # Get and populate DB with events of top 15 France locations
+```
+The target host architecture can also be overridden per-host in `inventory.yml`:
+```yml
+static:
+  hosts:
+    sortir_in:
+      ansible_host: sortir.in
+      ansible_user: debian
+      sortir_arch: "amd64"                   # Binary architecture of the target host
 ```
 
 ## Installation
 ```sh
-ansible-playbook -i inventory.yml site.yml --extra-vars "@vars.yml"
+ansible-playbook -i inventory.yml site.yml
 ```

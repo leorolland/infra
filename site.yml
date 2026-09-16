@@ -1,9 +1,4 @@
 ---
-- name: Configure backup servers
-  hosts: backup
-  roles:
-    - pgdump
-
 - name: Configure web servers
   hosts: static
   become: true
