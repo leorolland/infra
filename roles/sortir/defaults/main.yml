@@ -1,6 +1,6 @@
 ---
 # Architecture of the target host (used to pick the release binary)
-sortir_arch: "arm64"
+sortir_arch: "amd64"
 # Where the binaries live on the remote host
 sortir_install_dir: "/home/{{ ansible_user }}/sortir.in"
 # Populate cron schedule
