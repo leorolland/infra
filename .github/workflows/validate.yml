@@ -40,9 +40,7 @@ jobs:
         run: pipx install ansible
 
       - name: Install requirements
-        run: |
-          ansible-galaxy collection install community.general
-          ansible-galaxy install -r requirements.yml
+        run: ansible-galaxy install -r requirements.yml
 
       - name: Set up SSH
         env:

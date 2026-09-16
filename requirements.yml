@@ -1,2 +1,6 @@
-- src: https://github.com/caddy-ansible/caddy-ansible
-  version: v3.2.0
+---
+roles:
+  - src: https://github.com/caddy-ansible/caddy-ansible
+    version: v3.2.0
+collections:
+  - name: community.general

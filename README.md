@@ -14,7 +14,6 @@ My personal infrastructure is composed of:
 
 1. Install dependencies
 ```sh
-ansible-galaxy collection install community.general
 ansible-galaxy install -r requirements.yml
 ```
 
