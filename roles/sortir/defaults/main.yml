@@ -9,4 +9,4 @@ sortir_install_dir: "/home/{{ ansible_user }}/sortir.in"
 sortir_populate_cron_hour: "*/12"
 sortir_populate_cron_minute: "0"
 # Number of France locations to populate the DB with
-sortir_populate_locations_quantity: "15"
+sortir_populate_locations_quantity: "100"
