@@ -1,6 +1,6 @@
 ---
 # Version of the sortir.in release to install (github release tag)
-sortir_version: "v0.5.1"
+sortir_version: "v0.6.0"
 # Architecture of the target host (used to pick the release binary)
 sortir_arch: "amd64"
 # Where the binaries live on the remote host
@@ -9,4 +9,4 @@ sortir_install_dir: "/home/{{ ansible_user }}/sortir.in"
 sortir_populate_cron_hour: "*/12"
 sortir_populate_cron_minute: "0"
 # Number of France locations to populate the DB with
-sortir_populate_locations_quantity: "15"
+sortir_populate_locations_quantity: "100"
